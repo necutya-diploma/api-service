@@ -1,0 +1,41 @@
+{
+  "log": {
+    "level": "debug",
+    "format": "text"
+  },
+  "http": {
+    "address": ":8080",
+    "url_prefix": "/api",
+    "external_url_prefix": "/api/ext",
+    "csrf_secured_cookie": true,
+    "cors_allowed_host": [
+      "*"
+    ]
+  },
+  "mongo": {
+    "database_name": "faker"
+  },
+  "redis": {
+    "pool_size": 10
+  },
+  "token": {
+    "access_token_ttl": 60000000000,
+    "refresh_token_ttl": 24
+  },
+  "ai": {
+    "addr": "127.0.0.1:50051"
+  },
+  "notification": {
+    "addr": "127.0.0.1:8083",
+    "fromName": "CheckIT App",
+    "fromAddr": "artem.lebedev.test@gmail.com"
+  },
+  "payments": {
+    "merchant_id": 1396424,
+    "merchant_password": "test",
+    "currency": "USD",
+    "language": "en",
+    "response_url": "",
+    "callback_url": "https://667d-93-74-26-171.ngrok.io/api/v1/payments/subscribe/callback"
+  }
+}

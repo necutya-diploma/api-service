@@ -1,0 +1,69 @@
+version: '3.4'
+
+services:
+  app:
+    image: facker-app
+    container_name: facker-app
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+      - redisdb
+    volumes:
+      - ./bin/:/root/
+      - ./configs/:/root/configs/
+    env_file:
+      - ../.env
+
+  develop:
+    image: facker-app-develop
+    container_name: facker-app-develop
+    build:
+      context: ../.data/go
+      dockerfile: Dockerfile.develop
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+      - redisdb
+    volumes:
+      - ./:/root/
+    working_dir: /root
+    env_file:
+      - ../.env
+    networks:
+      - new
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+      - MONGODB_DATABASE=faker
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    volumes:
+      - ../.data/db:/data/db
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
+    networks:
+      new:
+        aliases:
+          - mongodb
+
+  redisdb:
+    image: redis
+    container_name: redisdb
+    command: redis-server --requirepass faker
+    ports:
+      - "6379:6379"
+    networks:
+      new:
+        aliases:
+          - redisdb
+
+networks:
+  new:
