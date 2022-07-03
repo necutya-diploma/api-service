@@ -27,6 +27,7 @@ type AIService struct {
 	requestCounterRepo RequestCounterRepository
 	aiManager          AIManager
 	planRepo           PlanRepository
+	userRepo           UserRepository
 }
 
 func NewAIService(
@@ -34,12 +35,14 @@ func NewAIService(
 	requestCounterRepo RequestCounterRepository,
 	aiManager AIManager,
 	planRepo PlanRepository,
+	userRepo UserRepository,
 ) *AIService {
 	return &AIService{
 		messageRepo:        messageRepo,
 		requestCounterRepo: requestCounterRepo,
 		aiManager:          aiManager,
 		planRepo:           planRepo,
+		userRepo:           userRepo,
 	}
 }
 
@@ -112,18 +115,23 @@ func (s *AIService) validateRequestCountPerDay(ctx context.Context, userID, plan
 		return err
 	}
 
-	plan, err := s.planRepo.GetOne(ctx, planID)
+	user, err := s.userRepo.GetUserByID(ctx, userID)
+	if err != nil {
+		return err
+	}
+
+	plan, err := s.planRepo.GetOne(ctx, user.PlanID)
 	if err != nil {
 		return err
 	}
 
 	switch requestType {
 	case domain.External:
-		if plan.ExternalRequestsCount != 0 && reqCount > plan.ExternalRequestsCount {
+		if plan.ExternalRequestsCount != 0 && reqCount >= plan.ExternalRequestsCount {
 			return core.ErrRequestLimit
 		}
 	case domain.Internal:
-		if plan.InternalRequestsCount != 0 && reqCount > plan.InternalRequestsCount {
+		if plan.InternalRequestsCount != 0 && reqCount >= plan.InternalRequestsCount {
 			return core.ErrRequestLimit
 		}
 	}

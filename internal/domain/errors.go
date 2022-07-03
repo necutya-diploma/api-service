@@ -10,6 +10,7 @@ var (
 	ErrExpiredSession         = errors.New("session is expired")
 	ErrInvalidSession         = errors.New("session is invalid")
 	ErrUnconfirmedEmail       = errors.New("unconfirmed email")
+	ErrInvalidExternalToken   = errors.New("invalid external token")
 
 	ErrExpiredCode = errors.New("code is expired, try one more time")
 	ErrInvalidCode = errors.New("invalid verification code")

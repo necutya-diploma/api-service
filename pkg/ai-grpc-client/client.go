@@ -2,6 +2,7 @@ package ai_grpc_client
 
 import (
 	"context"
+	"math"
 	"time"
 
 	"google.golang.org/grpc"
@@ -43,8 +44,7 @@ func (ai *AiGrpc) CheckMessage(msg string) (string, bool, float64, error) {
 	if err != nil {
 		return "", false, 0.0, err
 	}
-
-	return r.Message, r.IsGenerated, float64(r.GeneratedPercent), nil
+	return r.Message, r.IsGenerated, roundValueToTwoDecimalPlaces(float64(r.GeneratedPercent)), nil
 }
 
 func convertGrpcMessageResponseToCheckMessageResponse(response *pb.MessageResponse) *CheckMessageResponse {
@@ -53,4 +53,8 @@ func convertGrpcMessageResponseToCheckMessageResponse(response *pb.MessageRespon
 		IsGenerated:      response.IsGenerated,
 		GeneratedPercent: response.GeneratedPercent,
 	}
+}
+
+func roundValueToTwoDecimalPlaces(value float64) float64 {
+	return math.Round(value*100) / 100
 }

@@ -330,7 +330,7 @@ func (s *AuthService) RefreshToken(ctx context.Context, userID, refreshToken str
 func (s *AuthService) ValidateExternalToken(ctx context.Context, externalToken string) (string, error) {
 	user, err := s.userRepo.GetUserByExternalToken(ctx, externalToken)
 	if err != nil {
-		return "", err
+		return "", core.ErrInvalidExternalToken
 	}
 
 	if !user.IsConfirmed {

@@ -40,7 +40,7 @@ func New(
 			accessTokenTTL, refreshTokenTTL, verificationCodeTTL,
 		),
 		User:     NewUserService(userRepo, planRepo, orderRepo, requestCounterRepo, hasher, notificationManager, paymentsManager, codeManager),
-		AI:       NewAIService(messageRepo, requestCounterRepo, aiManager, planRepo),
+		AI:       NewAIService(messageRepo, requestCounterRepo, aiManager, planRepo, userRepo),
 		Admin:    NewAdminService(userRepo, planRepo),
 		Payments: NewPaymentsService(orderRepo, userRepo, planRepo, paymentsManager, notificationManager),
 		Plan:     NewPlanService(planRepo),

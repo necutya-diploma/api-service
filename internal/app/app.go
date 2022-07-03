@@ -96,6 +96,7 @@ func Run(configPath string) {
 			cfg.HTTP.CORSAllowedHost,
 		),
 	)
+
 	httpServer.Run(ctx)
 }
 

@@ -143,7 +143,6 @@ type userConfirmEmailRequest struct {
 
 func (h *Handler) userConfirmEmail(w http.ResponseWriter, r *http.Request) {
 	var input userConfirmEmailRequest
-	log.Println("here")
 	email, err := GetPathVar(r, "user_email", stringType)
 	if err != nil {
 		SendEmptyResponse(w, http.StatusBadRequest)

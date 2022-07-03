@@ -19,6 +19,8 @@ import (
 const (
 	contentTypeJSON = "application/json;charset=utf-8"
 
+	externalAuthHeader = "x-checkit-external-auth"
+
 	accessTokenHeader = "Authorization"
 	bearerSchema      = "Bearer"
 
@@ -73,7 +75,7 @@ func SendHTTPError(w http.ResponseWriter, err error) {
 		httpErr.StatusCode = http.StatusUnauthorized
 		httpErr.Code = "unauthorized"
 
-	case core.ErrUnconfirmedEmail, core.ErrInvalidLoginOrPassword:
+	case core.ErrUnconfirmedEmail, core.ErrInvalidLoginOrPassword, core.ErrInvalidExternalToken:
 		httpErr.StatusCode = http.StatusUnauthorized
 		httpErr.Code = "unauthorized"
 		httpErr.Message = err.Error()
@@ -171,6 +173,10 @@ func GetUserIPAddress(r *http.Request) string {
 
 func GetAuthorizationHeader(r *http.Request) string {
 	return r.Header.Get(accessTokenHeader)
+}
+
+func GetExternalAuthorizationHeader(r *http.Request) string {
+	return r.Header.Get(externalAuthHeader)
 }
 
 func SetUserIDHeader(r *http.Request, userID string) {

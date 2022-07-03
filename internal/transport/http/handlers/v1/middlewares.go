@@ -76,14 +76,8 @@ func (h *Handler) AdminMiddleware(next http.Handler) http.Handler {
 func (h *Handler) ExternalAuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var (
-			authToken = GetAuthorizationHeader(r)
+			externalToken = GetExternalAuthorizationHeader(r)
 		)
-
-		externalToken, err := ParseBearerAuthorizationHeader(authToken)
-		if err != nil {
-			SendEmptyResponse(w, http.StatusUnauthorized)
-			return
-		}
 
 		userID, err := h.services.Auth.ValidateExternalToken(r.Context(), externalToken)
 		if err != nil {
